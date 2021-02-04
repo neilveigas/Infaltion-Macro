@@ -1,0 +1,156 @@
+Sub Inflate_RR()
+'
+' Inflate_RR Macro
+' Inflate replacement reserves
+'
+
+'
+    Rows("1:5").Select
+    Selection.Delete Shift:=xlUp
+    Cells.Select
+    Selection.Borders(xlDiagonalDown).LineStyle = xlNone
+    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
+    With Selection.Borders(xlEdgeLeft)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeRight)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideVertical)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideHorizontal)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    Columns("C:C").Select
+    Selection.Hyperlinks.Delete
+    Selection.Borders(xlDiagonalDown).LineStyle = xlNone
+    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
+    With Selection.Borders(xlEdgeLeft)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeRight)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideVertical)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideHorizontal)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    Cells.Select
+    Selection.Copy
+    Sheets.Add After:=ActiveSheet
+    ActiveSheet.Paste
+    
+    Dim firstCol As Range
+    Set firstCol = Range("A1:AH20").Find("Subtotal")
+    Dim fcol As Long
+    fcol = firstCol.Column + 1
+    
+    Dim curYear As Long
+    curYear = Cells(1, fcol)
+    
+    
+    Cells(2, fcol).Select
+    Application.CutCopyMode = False
+    ActiveCell.FormulaR1C1 = _
+        "=IF(ISBLANK('AssetCALC - Replacement Reserve'!RC),"""",'AssetCALC - Replacement Reserve'!RC*(1.03^(R1C-" & curYear & ")))"
+    Cells(2, fcol).Select
+    Selection.AutoFill Destination:=Range(Cells(2, fcol), Cells(2, fcol + 20)), Type:=xlFillDefault
+    Dim lookup As Range
+    Set lookup = Range("A1:P20000").Find("Totals, Unescalated")
+    Dim frow As Long
+    frow = lookup.Row - 1
+    Range(Cells(2, fcol), Cells(2, fcol + 20)).Select
+    Selection.AutoFill Destination:=Range(Cells(2, fcol), Cells(frow, fcol + 20)), Type:=xlFillDefault
+    Range(Cells(2, fcol), Cells(frow, fcol + 20)).Select
+    Selection.NumberFormat = "$#,##0"
+    ActiveWindow.ScrollColumn = 2
+    ActiveWindow.ScrollColumn = 3
+    ActiveWindow.ScrollColumn = 4
+    Cells(1, fcol - 1).Select
+    ActiveCell.FormulaR1C1 = "Unescalated cost for each occurrence"
+    ActiveWindow.ScrollColumn = 3
+    ActiveWindow.ScrollColumn = 15
+    ActiveSheet.Shapes.Range(Array( _
+        "ctl00_ctl00_ctl00_body_body_ContentPlaceHolder1_Image1")).Select
+    Selection.Delete
+    Cells(1, fcol + 21).Select
+    ActiveCell.FormulaR1C1 = "Escalated Subtotal"
+    Cells(2, fcol + 21).Select
+    ActiveCell.FormulaR1C1 = "=SUM(RC[-21]:RC[-1])"
+    Cells(2, fcol + 21).Select
+    Selection.AutoFill Destination:=Range(Cells(2, fcol + 21), Cells(frow, fcol + 21)), Type:=xlFillDefault
+    Range("AG2:AG409").Select
+    ActiveWindow.ScrollRow = 393
+    ActiveWindow.ScrollRow = 1
+    Rows("1:1").Select
+    Range("O1").Activate
+    Selection.AutoFilter
+    With Selection
+        .HorizontalAlignment = xlLeft
+        .Orientation = 0
+        .AddIndent = False
+        .IndentLevel = 0
+        .ShrinkToFit = False
+        .ReadingOrder = xlContext
+        .MergeCells = False
+    End With
+    Range("K2").Select
+    Sheets("Sheet1").Select
+    Sheets("Sheet1").Name = "RR_Escalated"
+    Sheets("AssetCALC - Replacement Reserve").Select
+    Sheets("AssetCALC - Replacement Reserve").Name = "Replacement Reserve"
+    Sheets("Replacement Reserve").Select
+    Sheets("Replacement Reserve").Name = "Replacement Reserves_original"
+    Range("H18").Select
+End Sub
